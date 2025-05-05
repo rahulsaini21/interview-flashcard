@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Deck</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div id="deck-info">
+        <h1>Loading deck...</h1>
+    </div>
+    
+    <div id="subdecks">
+        <h2>Subdecks</h2>
+        <div id="subdecks-list"></div>
+        <a href="/create-deck.html" class="button">Add Subdeck</a>
+    </div>
+    
+    <a href="/index.html" class="button">Back to All Decks</a>
+    <a href="/flashcards.html" id="view-flashcards" class="button">View Flashcards</a>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/utils.js"></script>
+    <script>
+        const deckId = utils.getUrlParam('id');
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!deckId) {
+                window.location.href = '/index.html';
+                return;
+            }
+
+            document.getElementById('view-flashcards').href = 
+                `/flashcards.html?deckId=${deckId}`;
+
+            try {
+                const [deck, subdecks] = await Promise.all([
+                    api.getDeck(deckId),
+                    api.getSubDecks(deckId)
+                ]);
+                
+                document.getElementById('deck-info').innerHTML = `
+                    <h1>${deck.name}</h1>
+                    <p>Created: ${new Date(deck.createdAt).toLocaleDateString()}</p>
+                `;
+                
+                const subdecksList = document.getElementById('subdecks-list');
+                if (subdecks.length === 0) {
+                    subdecksList.innerHTML = '<p>No subdecks found</p>';
+                } else {
+                    subdecksList.innerHTML = subdecks.map(subdeck => `
+                        <div class="deck">
+                            <h3>${subdeck.name}</h3>
+                            <a href="/view-deck.html?id=${subdeck.id}" class="button">View</a>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                alert("Failed to load deck: " + error.message);
+                window.location.href = '/index.html';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Flashcard Preview</title>
+</head>
+<body>
+    <h1>Flashcard Preview</h1>
+    
+    <div>
+        <h2>Question:</h2>
+        <p th:text="${flashcard.question}"></p>
+    </div>
+    
+    <div>
+        <h2>Answer:</h2>
+        <p th:text="${flashcard.answer}"></p>
+    </div>
+    
+    <div th:if="${flashcard.description != null and !flashcard.description.isEmpty()}">
+        <h2>Description:</h2>
+        <p th:text="${flashcard.description}"></p>
+    </div>
+    
+    <a th:href="@{/decks/{deckId}/flashcards(deckId=${deckId})}">Back to Flashcards</a>
+</body>
+</html>

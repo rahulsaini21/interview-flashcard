@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Flashcard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h1>Create New Flashcard</h1>
+    <form id="card-form">
+        <label for="question">Question:</label>
+        <input type="text" id="question" required>
+        
+        <label for="answer">Answer:</label>
+        <input type="text" id="answer" required>
+        
+        <label for="description">Description (optional):</label>
+        <textarea id="description"></textarea>
+        
+        <button type="submit" class="button">Create</button>
+        <a href="/flashcards.html" id="cancel-link" class="button">Cancel</a>
+    </form>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/utils.js"></script>
+    <script>
+        const deckId = utils.getUrlParam('deckId');
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!deckId) {
+                window.location.href = '/index.html';
+                return;
+            }
+
+            document.getElementById('cancel-link').href = 
+                `/flashcards.html?deckId=${deckId}`;
+
+            document.getElementById('card-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const question = document.getElementById('question').value;
+                const answer = document.getElementById('answer').value;
+                const description = document.getElementById('description').value;
+
+                try {
+                    await api.createFlashcard(deckId, { question, answer, description });
+                    window.location.href = `/flashcards.html?deckId=${deckId}`;
+                } catch (error) {
+                    alert("Failed to create flashcard: " + error.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Flashcard</title>
+</head>
+<body>
+    <h1>Create New Flashcard</h1>
+    
+    <form th:action="@{/decks/{deckId}/flashcards(deckId=${deckId})}" method="post" th:object="${flashcard}">
+        <label for="question">Question:</label>
+        <input type="text" id="question" th:field="*{question}" required>
+        
+        <label for="answer">Answer:</label>
+        <input type="text" id="answer" th:field="*{answer}" required>
+        
+        <label for="description">Description (optional):</label>
+        <textarea id="description" th:field="*{description}"></textarea>
+        
+        <button type="submit">Create Flashcard</button>
+    </form>
+    
+    <a th:href="@{/decks/{id}/flashcards(id=${deckId})}">Cancel</a>
+</body>
+</html>

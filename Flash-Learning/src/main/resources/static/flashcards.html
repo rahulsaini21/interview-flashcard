@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flashcards</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h1>Flashcards</h1>
+    <div id="flashcards-list">
+        <p>Loading flashcards...</p>
+    </div>
+    <a href="/create-card.html" id="create-card-link" class="button">Create New Flashcard</a>
+    <a href="/index.html" class="button">Back to Decks</a>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/utils.js"></script>
+    <script>
+        const deckId = utils.getUrlParam('deckId');
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!deckId) {
+                window.location.href = '/index.html';
+                return;
+            }
+
+            document.getElementById('create-card-link').href = 
+                `/create-card.html?deckId=${deckId}`;
+
+            try {
+                const flashcards = await api.getFlashcards(deckId);
+                renderFlashcards(flashcards);
+            } catch (error) {
+                alert("Failed to load flashcards: " + error.message);
+            }
+        });
+
+        function renderFlashcards(flashcards) {
+            const container = document.getElementById('flashcards-list');
+            if (flashcards.length === 0) {
+                container.innerHTML = '<p>No flashcards found</p>';
+                return;
+            }
+
+            container.innerHTML = flashcards.map(card => `
+                <div class="flashcard">
+                    <h3>${card.question}</h3>
+                    <p>${card.answer}</p>
+                    ${card.description ? `<p>${card.description}</p>` : ''}
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

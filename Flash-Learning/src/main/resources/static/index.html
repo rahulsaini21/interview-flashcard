@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flashcard App</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h1>My Decks</h1>
+    <div id="decks-list">
+        <p>Loading decks...</p>
+    </div>
+    <a href="/create-deck.html" class="button">Create New Deck</a>
+    
+    <script src="/js/api.js"></script>
+    <script src="/js/utils.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const decks = await api.getDecks();
+                renderDecks(decks);
+            } catch (error) {
+                alert("Failed to load decks: " + error.message);
+            }
+        });
+
+        function renderDecks(decks) {
+            const container = document.getElementById('decks-list');
+            if (decks.length === 0) {
+                container.innerHTML = '<p>No decks found. Create your first deck!</p>';
+                return;
+            }
+
+            container.innerHTML = decks.map(deck => `
+                <div class="deck">
+                    <h3>${deck.name}</h3>
+                    <a href="/view-deck.html?id=${deck.id}" class="button">View</a>
+                    <a href="/flashcards.html?deckId=${deck.id}" class="button">Flashcards</a>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

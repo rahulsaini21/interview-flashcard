@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${deck.name}"></title>
+</head>
+<body>
+    <h1 th:text="${deck.name}"></h1>
+    
+    <h2>Subdecks</h2>
+    <ul>
+        <li th:each="subDeck : ${subDecks}">
+            <a th:href="@{/decks/{id}(id=${subDeck.id})}" th:text="${subDeck.name}"></a>
+            <a th:href="@{/decks/{id}/delete(id=${subDeck.id})}" onclick="return confirm('Are you sure?')">Delete</a>
+        </li>
+    </ul>
+    
+    <a th:href="@{/decks/new(parentId=${deck.id})}">Add Subdeck</a>
+    <a th:href="@{/decks/{id}/flashcards(id=${deck.id})}">View Flashcards</a>
+    <a th:href="/decks">Back to All Decks</a>
+</body>
+</html>

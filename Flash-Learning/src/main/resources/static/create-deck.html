@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Deck</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h1>Create New Deck</h1>
+    <form id="deck-form">
+        <label for="name">Deck Name:</label>
+        <input type="text" id="name" required>
+        
+        <label for="parent">Parent Deck (optional):</label>
+        <select id="parent">
+            <option value="">-- No Parent --</option>
+        </select>
+        
+        <button type="submit" class="button">Create</button>
+        <a href="/index.html" class="button">Cancel</a>
+    </form>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/utils.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const decks = await api.getDecks();
+                const select = document.getElementById('parent');
+                decks.forEach(deck => {
+                    const option = document.createElement('option');
+                    option.value = deck.id;
+                    option.textContent = deck.name;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                alert("Failed to load decks: " + error.message);
+            }
+
+            document.getElementById('deck-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const name = document.getElementById('name').value;
+                const parentId = document.getElementById('parent').value;
+
+                try {
+                    await api.createDeck({ name, parentId });
+                    window.location.href = parentId ? 
+                        `/view-deck.html?id=${parentId}` : 
+                        '/index.html';
+                } catch (error) {
+                    alert("Failed to create deck: " + error.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

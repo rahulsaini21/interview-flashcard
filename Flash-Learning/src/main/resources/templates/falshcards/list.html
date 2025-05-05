@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Flashcards</title>
+</head>
+<body>
+    <h1>Flashcards</h1>
+    
+    <a th:href="@{/decks/{id}/flashcards/new(id=${deckId})}">Create New Flashcard</a>
+    <a th:href="@{/decks/{id}/flashcards/import(id=${deckId})}">Import from CSV</a>
+    <a th:href="@{/decks/{id}(id=${deckId})}">Back to Deck</a>
+    
+    <ul>
+        <li th:each="flashcard : ${flashcards}">
+            <a th:href="@{/decks/{deckId}/flashcards/{id}/preview(deckId=${deckId}, id=${flashcard.id})}" 
+               th:text="${flashcard.question}"></a>
+            <a th:href="@{/decks/{deckId}/flashcards/{id}/delete(deckId=${deckId}, id=${flashcard.id})}" 
+               onclick="return confirm('Are you sure?')">Delete</a>
+        </li>
+    </ul>
+</body>
+</html>

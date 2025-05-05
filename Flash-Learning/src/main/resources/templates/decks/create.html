@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Deck</title>
+</head>
+<body>
+    <h1>Create New Deck</h1>
+    
+    <form th:action="@{/decks}" method="post" th:object="${deck}">
+        <input type="text" th:name="parentId" th:value="${parentId}">
+        
+        <label for="name">Deck Name:</label>
+        <input type="text" id="name" th:field="*{name}" required>
+        
+        <button type="submit">Create Deck</button>
+    </form>
+    
+    <a th:href="@{/decks}">Cancel</a>
+</body>
+</html>

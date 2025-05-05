@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Import Flashcards</title>
+</head>
+<body>
+    <h1>Import Flashcards from CSV</h1>
+    
+    <form th:action="@{/decks/{deckId}/flashcards/import(deckId=${deckId})}" method="post" enctype="multipart/form-data">
+        <label for="file">CSV File:</label>
+        <input type="file" id="file" name="file" accept=".csv" required>
+        
+        <p>CSV format should have columns: question, answer, description (optional)</p>
+        
+        <button type="submit">Import</button>
+    </form>
+    
+    <a th:href="@{/decks/{id}/flashcards(id=${deckId})}">Cancel</a>
+</body>
+</html>
